@@ -97,7 +97,9 @@ body {
   .noisy {
     @apply absolute inset-0 w-full h-full bg-[url("/images/noise.png")];
   }
-
+.relative{
+  margin-top: -70px;
+}
   /* ---------- HERO ---------- */
   #hero {
     @apply relative z-10 min-h-dvh w-full;

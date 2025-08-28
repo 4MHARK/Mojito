@@ -1,45 +1,37 @@
 import React from "react";
 import { navLinks } from "../../constants/index.js";
 import { useGSAP } from "@gsap/react";
-import gsap from 'gsap'
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const Navbar = () => {
+  useGSAP(() => {
+    gsap.registerPlugin(ScrollTrigger);
 
-useGSAP(() =>{
-    const navTween = gsap.timeline({
-        scrollTrigger: {
-            trigger: "nav",
-            start: "bottom top",
-            scrub: true,
-        },
+    gsap.to('nav', {
+      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Use rgba for transparency
+      backdropFilter: 'blur(10px)',
+      duration: 0.5,
+      ease: 'power1.inOut',
+      scrollTrigger: {
+        trigger: "body", // Use a trigger that encompasses the entire page
+        start: "top top", // When the top of the body hits the top of the viewport
+        end: "bottom top",
+        toggleActions: "play none reverse none", // play on scroll down, reverse on scroll up
+        onEnter: () => gsap.to('nav', {
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(10px)',
+        }),
+        onLeaveBack: () => gsap.to('nav', {
+          backgroundColor: 'transparent',
+          backdropFilter: 'blur(0px)',
+        })
+      },
     });
-    navTween.fromTo('nav', { backgroundColor: 'transparent'},
-{
-    backgroundColor: '#00000050',
-    duration: 1,
-    backgroundFilter: 'blur(10px)',
-    ease: 'power1.inOut',
-    opacity: 0,
-    // onComplete: () => {
-    //     navTween.fromTo('nav', { backgroundColor: '#00000050'},
-    //     {
-    //         backgroundColor: 'transparent',
-    //         duration: 1,
-    //         backgroundFilter: 'blur(0px)',
-    //         ease: 'power1.inOut',
-    //         opacity: 1,
-    //     });
-    // },
-    });
-}, [])
-
-
-
-
-
+  }, []);
 
   return (
-    <nav className="flex justify-between items-center p-4">
+    <nav className="flex justify-between items-center p-4 fixed top-0 w-full">
       {/* Brand / Logo */}
       <a href="#home" className="flex items-center gap-2">
         <img src="/images/logo.png" alt="logo" />
@@ -50,8 +42,8 @@ useGSAP(() =>{
       <ul className="flex gap-6">
         {navLinks.map((link) => (
           <li key={link.id}>
-            <a 
-              href={`#${link.id}`} 
+            <a
+              href={`#${link.id}`}
               className="hover:text-yellow-500 transition-colors"
             >
               {link.title}
